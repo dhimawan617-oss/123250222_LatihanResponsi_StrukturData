@@ -410,14 +410,18 @@ int main()
         switch (opsi)
         {
             case '1':
-                char opsi = 'y';
-                while (opsi == 'y' || opsi == 'Y')
                 {
-                    tambah_cucian();
-                    cout << "Apakah anda ingin menambahkan cucian lagi? (y/n): ";
-                    cin >> opsi;
+                    char pilihan = 'y';
+                    while (pilihan == 'y' || pilihan == 'Y')
+                    {
+                        tambah_cucian();
+                        cout << "Apakah anda ingin menambahkan cucian lagi? (y/n): ";
+                        cin >> pilihan;
+                    }
                     break;
-                case '2':
+                }
+            case '2':
+                {
                     lihat_antrean();
                     break;
                 }
