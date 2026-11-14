@@ -37,13 +37,13 @@ nodeTree *tambah_tree(nodeTree *akar, int nota, string nama)
     {
         return new nodeTree{nota, nama, nullptr, nullptr};
     }
-    if (nota >= akar->nota)
+    if (nota < akar->nota)
     {
-        return tambah_tree(akar->kiri, nota, nama);
+        akar->kiri = tambah_tree(akar->kiri, nota, nama);
     }
-    if (nota <= akar->nota)
+    else if(nota > akar->nota)
     {
-        return tambah_tree(akar->kanan, nota, nama);
+        akar->kanan = tambah_tree(akar->kanan, nota, nama);
     }
     return akar;
 }
@@ -79,34 +79,36 @@ nodeTree *hapus_tree(nodeTree *akar, int nota)
 
     if (nota < akar->nota)
     {
-        return hapus_tree(akar->kiri, nota);
+        akar->kiri = hapus_tree(akar->kiri, nota);
     }
-    else if (nota < akar->nota)
+    else if (nota > akar->nota)
     {
-        return hapus_tree(akar->kanan, nota);
+        akar->kanan = hapus_tree(akar->kanan, nota);
     }
     else
     {
-        if (akar->kiri == NULL)
+        if (akar->kiri == nullptr)
         {
             nodeTree *bantu = akar->kanan;
             delete akar;
             return bantu;
         }
-        if (akar->kanan == NULL)
+        if (akar->kanan == nullptr)
         {
             nodeTree *bantu = akar->kiri;
             delete akar;
             return bantu;
         }
         nodeTree *pengganti = akar->kanan;
-        while (akar->kiri == nullptr)
+        while (pengganti->kiri != nullptr)
         {
-            akar = akar->kiri;
+            pengganti = pengganti->kiri;
         }
         akar->nota = pengganti->nota;
-        return hapus_tree(akar->kanan, akar->nota);
+        akar->nama = pengganti->nama;
+        akar->kanan = hapus_tree(akar->kanan, pengganti->nota);
     }
+    return akar;
 }
 
 // menampilkan isi tree dengan urutan: node, kiri, kanan.
@@ -120,7 +122,6 @@ void preorder(nodeTree *akar, int &no)
     cout << no << ". [" << akar->nota << "] " << akar->nama << endl;
     no++;
 
-    cout << akar->nota << " ";
     preorder(akar->kiri, no);
     preorder(akar->kanan, no);
 }
@@ -131,11 +132,12 @@ void inorder(nodeTree *akar, int &no)
 {
     if (akar == nullptr)
         return;
+    
+    inorder(akar->kiri, no);
+
     cout << no << ". [" << akar->nota << "] " << akar->nama << endl;
     no++;
 
-    inorder(akar->kiri, no);
-    cout << akar->nota, no;
     inorder(akar->kanan, no);
 }
 
